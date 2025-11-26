@@ -1,0 +1,461 @@
+main {
+    overflow-y: auto;
+  }
+  .fundo {
+    background-color: white;
+    height: 87vh;
+    width: 77%;
+    display: flex;
+    top: 13vh;
+    right: 0;
+    border-left: 1.5px solid black;
+    position: absolute;
+    flex-direction: column;
+    justify-content: initial;
+    align-items: center;
+  }
+  .cabecalho-fundo {
+    background-color: #d9d9d9;
+    width: 100%;
+    height: 85px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  
+    gap: 10px;
+    z-index: 8;
+  }
+  .nome-titulo-monitor {
+    width: 20rem;
+  }
+  .mensagens-aviso {
+    display: flex;
+    margin: auto;
+    background-color: #ffcd06;
+    width: 25rem;
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 1.8rem;
+    font-weight: normal;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  .lista-nomes {
+    gap: 20px;
+    padding-top: 2rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23%;
+    height: 77vh;
+    background: #358b11;
+  }
+  .barra-de-pesquisa {
+    width: 23%;
+    height: 50px;
+    background-color: #358b11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    left: 0;
+    border-bottom: 1.5px solid black;
+  }
+  /* Added contato-item wrapper style */
+  .contato-item {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .caixa-nome {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 10px;
+    width: 300px;
+    height: 85px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .caixa-nome:hover {
+    background-color: #d9d9d9;
+  }
+  .caixa-matematica {
+    background-color: #00b5e7;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-portugues {
+    background-color: #fc4343;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-historia {
+    background-color: #c156cb;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-elet-analogica {
+    background-color: #e77300;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-biologia {
+    background-color: #e2e507;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-quimica {
+    background-color: #07e589;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-fisica {
+    background-color: #6707e5;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-filosofia {
+    background-color: #895129;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-WEB {
+    background-color: #caca8c;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-geografia {
+    background-color: #39f3e4;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .caixa-aluno {
+    background-color: #808080;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 225px;
+    height: 85px;
+    width: 20px;
+  }
+  .icone-cabecalho {
+    width: 45px;
+    height: 50px;
+    margin-left: 10px;
+  }
+  .icone-contato-cabecalho {
+    width: 45px;
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  .icone-contato {
+    width: 45px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  .nome-monitor {
+    margin-left: 50px;
+  }
+  .titulo-monitor-cabecalho {
+    align-self: last baseline;
+    color: #4ab91b;
+    font-size: medium;
+    width: 50rem;
+  }
+  .titulo-monitor-caixa-nome {
+    align-self: last baseline;
+    margin-left: 50px;
+  }
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .perfil {
+    color: white;
+  }
+  
+  .mensagens-container {
+    display: flex;
+    overflow-y: scroll;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid black;
+  }
+  
+  .mensagens-geral {
+    max-width: 35%;
+    background-color: #f0f0f0;
+    padding: 14px 18px;
+    margin: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+    text-align: initial;
+  }
+  
+  .mensagens-geral .texto {
+    margin: 0;
+    font-size: 14px;
+    color: #1b1b1b;
+  }
+  
+  .mensagens-geral .hora {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #888;
+    text-align: right;
+  }
+  
+  .esquerda {
+    align-self: flex-start;
+    border-radius: 0px 12px 12px 12px;
+  }
+  
+  .direita {
+    align-self: flex-end;
+    border-radius: 12px 0px 12px 12px;
+    background-color: #d2febf;
+  }
+  
+  .input-container {
+    height: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: lightgray;
+  }
+  
+  /* Added styles for file preview */
+  .file-preview-container {
+    width: 100%;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .file-preview-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .file-preview-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #358b11;
+  }
+  
+  .file-preview-icon {
+    font-size: 40px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e3e3e3;
+    border-radius: 8px;
+  }
+  
+  .file-preview-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .file-preview-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .file-preview-size {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .file-preview-remove {
+    background-color: #fc4343;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  
+  .file-preview-remove:hover {
+    background-color: #d93636;
+  }
+  
+  .form-input {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  input {
+    width: 35rem;
+    height: 2rem;
+    border-radius: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border: transparent;
+    background-color: #e3e3e3;
+    color: rgba(0, 0, 0, 0.721);
+  }
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.721);
+  }
+  input[type="file"] {
+    display: none;
+  }
+  input[type="button"] {
+    display: none;
+  }
+  .icone-microfone {
+    margin-left: 10px;
+  }
+  .icone-file {
+    margin-right: 10px;
+  }
+  label {
+    display: flex;
+    align-items: center;
+  }
+  #texto {
+    position: absolute;
+    font-size: 35px;
+    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    left: 30%;
+    top: 22%;
+  }
+  h1 {
+    font-size: large;
+  }
+  .botao-enviar {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  .chat-date {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 13px;
+    color: #555;
+    background: #e6e6e6;
+    padding: 4px 10px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 8px;
+  }
+  .img-preview {
+    max-width: 220px;
+    border-radius: 8px;
+    display: block;
+  }
+  
+  .imagem-msg {
+    margin-bottom: 5px;
+  }
+  
+  .arquivo-link {
+    text-decoration: none;
+    color: #005eff;
+    font-weight: 600;
+  }
+  
+  .chat-date {
+    text-align: center;
+    margin: 12px 0;
+    color: #666;
+    font-size: 13px;
+  }
+  
