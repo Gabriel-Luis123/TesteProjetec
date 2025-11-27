@@ -127,11 +127,32 @@ foreach ($rows as $m) {
         $status = "Disponível";
     }
 
-    $descricaoArray = json_decode($m['descricao'], true);
-    if (is_array($descricaoArray)) {
-        $descricao = $descricaoArray[0];
+    
+    $raw = $m['descricao'];
+
+    $raw = trim($raw);
+    $raw = trim($raw, "\"");
+
+    $raw = stripslashes($raw);
+
+    $conteudosArray = json_decode($raw, true);
+
+    if (!is_array($conteudosArray)) {
+
+        $raw2 = trim($raw, "\"");
+        $descricao = json_decode($raw2, true);
+    }
+
+    if (is_array($conteudosArray)) {
+
+        $conteudosArray = array_map(function($item) {
+            return ucwords(mb_strtolower(trim($item)));
+        }, $conteudosArray);
+
+        $descricao = implode(', ', $conteudosArray);
+
     } else {
-        $descricao = $m['descricao'];
+        $descricao = $monitoria['Conteudos_Abordados'];
     }
 
     $sqlInscrito = "

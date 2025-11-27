@@ -59,7 +59,7 @@ sort($classes);
                 <input
                     type="text"
                     name="search"
-                    placeholder="Buscar por nome ou ID..."
+                    placeholder="Buscar por nome ou RA..."
                     value="<?php echo htmlspecialchars($searchQuery); ?>"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
             </div>
