@@ -39,10 +39,34 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $publicoArray = json_decode($row['Publico_Alvo'], true);
     $publicoString = is_array($publicoArray) ? implode(', ', $publicoArray) : $row['Publico_Alvo'];
 
-    $conteudosArray = json_decode($row['Conteudos_Abordados'], true);
-    $conteudosString = is_array($conteudosArray)
-        ? implode(', ', $conteudosArray)
-        : $row['Conteudos_Abordados'];
+        
+    $raw = $row['Conteudos_Abordados'];
+
+    $raw = trim($raw);
+    $raw = trim($raw, "\"");
+
+    $raw = stripslashes($raw);
+
+    $conteudosArray = json_decode($raw, true);
+
+    if (!is_array($conteudosArray)) {
+
+        $raw2 = trim($raw, "\"");
+        $conteudosArray = json_decode($raw2, true);
+    }
+
+if (is_array($conteudosArray)) {
+
+    $conteudosArray = array_map(function($item) {
+        return ucwords(mb_strtolower(trim($item)));
+    }, $conteudosArray);
+
+    $conteudosString = implode(', ', $conteudosArray);
+
+} else {
+    $conteudosString = $monitoria['Conteudos_Abordados'];
+}
+
 
     list($hora, $min, $seg) = explode(':', $row['Horario']);
     $horarioFormatado = ($min === "00") ? "{$hora}h" : "{$hora}h e {$min}min";

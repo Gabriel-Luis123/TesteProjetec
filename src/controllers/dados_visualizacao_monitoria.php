@@ -69,7 +69,34 @@ $estaInscrito = $stmtInscricao->fetch(PDO::FETCH_ASSOC) ? true : false;
 $materiaCompleta = $row['Disciplina'];
 $materiaBase = explode('-', $materiaCompleta)[0];
 
-$conteudosArray = json_decode($row['Conteudos_Abordados'], true);
+
+$raw = $row['Conteudos_Abordados'];
+
+$raw = trim($raw);
+$raw = trim($raw, "\"");
+
+$raw = stripslashes($raw);
+
+$conteudosArray = json_decode($raw, true);
+
+if (!is_array($conteudosArray)) {
+
+    $raw2 = trim($raw, "\"");
+    $conteudosArray = json_decode($raw2, true);
+}
+
+if (is_array($conteudosArray)) {
+
+    $conteudosArray = array_map(function($item) {
+        return ucwords(mb_strtolower(trim($item)));
+    }, $conteudosArray);
+
+    $conteudosString = implode(', ', $conteudosArray);
+
+} else {
+    $conteudosString = $monitoria['Conteudos_Abordados'];
+}
+
 $primeiroConteudo = is_array($conteudosArray) ? $conteudosArray[0] : $row['Conteudos_Abordados'];
 
 $professoresBase = $professores_monitorias[$materiaBase] ?? ['Não informado'];
@@ -84,7 +111,7 @@ $monitoria = [
     'id' => $row['ID_Monitoria'],
     'RaMonitor' => $row['Registro_Academico'],
     'materia' => $materiaBase,
-    'disciplina' => $materiaCompleta,
+    'disciplina' => $conteudosString,
     'monitor' => $row['monitor'],
     'email_monitor' => $row['email_monitor'],
     'horario' => date('H:i', strtotime($row['Horario'])),

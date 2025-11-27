@@ -119,6 +119,15 @@ body {
     padding-left: 40px;
 }
 
+.btn-fixo{
+    position: fixed;
+    bottom: 3rem;
+}
+
+.btn-normal {
+    position: static;
+}
+
 .button-save {
     background-color: var(--primary);
     color: white;

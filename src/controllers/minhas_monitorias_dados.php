@@ -35,9 +35,7 @@ if (!empty($resultado) && !empty($resultado['Disciplina_Monitorada'])) {
         $partes = explode('-', $disciplinaRaw, 2);
 
         $disciplina_base = trim($partes[0]);
-        var_dump($partes[1]);
         $ano = $partes[1];
-        var_dump($ano);
 
     } else {
         // Caso venha só "Eletrônica"

@@ -76,14 +76,32 @@ $stmtAlunos = $pdo->prepare($sqlAlunos);
 $stmtAlunos->execute([':id' => $monitoriaId]);
 $alunos = $stmtAlunos->fetchAll(PDO::FETCH_ASSOC);
 
-$conteudosArray = json_decode($monitoria['Conteudos_Abordados'], true);
+$raw = $monitoria['Conteudos_Abordados'];
 
-if (is_array($conteudosArray)) {
-    $conteudosString = implode(', ', $conteudosArray);
-} else {
-    $conteudosString = $monitoria['Conteudos_Abordados']; // caso já venha string
+$raw = trim($raw);
+$raw = trim($raw, "\"");
+
+$raw = stripslashes($raw);
+
+$conteudosArray = json_decode($raw, true);
+
+if (!is_array($conteudosArray)) {
+
+    $raw2 = trim($raw, "\"");
+    $conteudosArray = json_decode($raw2, true);
 }
 
+if (is_array($conteudosArray)) {
+
+    $conteudosArray = array_map(function($item) {
+        return ucwords(mb_strtolower(trim($item)));
+    }, $conteudosArray);
+
+    $conteudosString = implode(', ', $conteudosArray);
+
+} else {
+    $conteudosString = $monitoria['Conteudos_Abordados'];
+}
 
 $horaFormatada = date('H:i', strtotime($monitoria['hora_inicio']));
 

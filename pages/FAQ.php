@@ -45,6 +45,9 @@ $faqs = [
     ],[
         'pergunta' => 'Como acessar os anexos da monitoria que participei?',
         'resposta' => 'Os anexos da monitoria estão disponíveis junto com as outras informações da monitoria desejada, na agenda.'
+    ],[
+        'pergunta' => 'Como denunciar alguma mensagem inapropriada que recebi no chat?',
+        'resposta' => 'Envie uma mensagem para nosso email presente no footer do site.'
     ]
 ];
 

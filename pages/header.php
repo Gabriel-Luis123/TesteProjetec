@@ -11,6 +11,8 @@ if ($_SESSION['status'] === 'Administrador' && $paginaAtual !== 'adminPage.php')
     header('Location: adminPage.php?mensagem=acesso_invalido');
     exit;
 }
+
+$sessionId = session_id();
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -56,30 +58,58 @@ if ($_SESSION['status'] === 'Administrador' && $paginaAtual !== 'adminPage.php')
                                 <li class="cabecalho-navegacao-menu-elemento">Minhas Monitorias</li>
                             </a>
                         <?php else: ?>
-                            <?php endif; ?>
                         <?php endif; ?>
+                    <?php endif; ?>
                 </ul>
             </div>
             <a href="inicial.php">
                 <img class="cabecalho-navegacao-menu-logo" src="../public/img/menuItens/logo.png" alt="Logo do site MoniFacil">
             </a>
 
-            <div class="cabecalho-navegacao-menu-perfil">
-                <div class="menu-wrapper-perfil">
-                    <img class="cabecalho-navegacao-menu-perfil-imagem" src="../public/img/menuItens/meu-perfil.png" alt="Foto para acessar o meu perfil">
-                </div>
-                <div class="menu-quebra">
-                    <ul class="cabecalho-navegacao-menu-perfil-elementos aberto">
-                        <?php if($paginaAtual !== 'adminPage.php'): ?>
-                        <a href='perfil.php' class="perfil">
-                            <li class="cabecalho-navegacao-menu-perfil-elemento">Meu Perfil</li>
-                        </a>
+            <!-- Adicionado contêiner para mostrar tipo de sessão e perfil -->
+            <div class="cabecalho-navegacao-menu-perfil-container">
+                <!-- Nova div mostrando o tipo de sessão do usuário -->
+                <div class="cabecalho-navegacao-sessao-tipo">
+                    <span class="sessao-tipo-badge">
+                        <?php
+                        $statusTexto = $_SESSION['status'];
+                        if ($_SESSION['status'] === 'Monitor') {
+                            $statusTexto = 'Monitor';
+                        } elseif ($_SESSION['status'] === 'Administrador') {
+                            $statusTexto = 'Administrador';
+                        } else {
+                            $statusTexto = 'Aluno';
+                        }
+                        echo $statusTexto;
+                        ?>
+                    </span>
+                    <!-- Adicionado identificador de sessão -->
+                    <span class="sessao-id-badge" title="ID da Sessão">
+                        <?php if (isset($_SESSION['registro'])): ?>
+                            RA: <?php echo $_SESSION['registro']; ?>
                         <?php else: ?>
-                            <?php endif;?>
-                        <a href="logout.php" class="perfil">
-                            <li class="cabecalho-navegacao-menu-perfil-elemento">Log out</li>
-                        </a>
-                    </ul>
+                            SIAPE: <?php echo $_SESSION['siape'] ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
+
+                <div class="cabecalho-navegacao-menu-perfil">
+                    <div class="menu-wrapper-perfil">
+                        <img class="cabecalho-navegacao-menu-perfil-imagem" src="../public/img/menuItens/meu-perfil.png" alt="Foto para acessar o meu perfil">
+                    </div>
+                    <div class="menu-quebra">
+                        <ul class="cabecalho-navegacao-menu-perfil-elementos aberto">
+                            <?php if ($paginaAtual !== 'adminPage.php'): ?>
+                                <a href='perfil.php' class="perfil">
+                                    <li class="cabecalho-navegacao-menu-perfil-elemento">Meu Perfil</li>
+                                </a>
+                            <?php else: ?>
+                            <?php endif; ?>
+                            <a href="logout.php" class="perfil">
+                                <li class="cabecalho-navegacao-menu-perfil-elemento">Log out</li>
+                            </a>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

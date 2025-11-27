@@ -7,19 +7,24 @@ require_once __DIR__ . '/header.php';
 // Simular dados do monitor (em produção, viriam de um banco de dados)
 require_once __DIR__ . '/../src/controllers/visualizacao_monitor_dados.php';
 
+function formatarTelefone($tel) {
+    $tel = preg_replace('/\D/', '', $tel);
+
+    if (strlen($tel) === 11) {
+        return sprintf("(%s) %s %s-%s",
+            substr($tel, 0, 2),   
+            substr($tel, 2, 1),   
+            substr($tel, 3, 4),   
+            substr($tel, 7, 4)   
+        );
+    }
+
+    return $tel;
+}
+
 
 ?>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - <?php echo htmlspecialchars($monitor['nome']); ?></title>
-    <style>
-        
-    </style>
-</head>
-<body>
+
     <div class="container">
         <a href="monitores.php" class="btn-back">
             <span>←</span> Voltar para Monitores
@@ -33,12 +38,11 @@ require_once __DIR__ . '/../src/controllers/visualizacao_monitor_dados.php';
                 <div class="profile-info">
                     <h1 class="profile-name"><?php echo htmlspecialchars($monitor['nome']); ?></h1>
                     <p class="profile-curso">
-                        <span>🎓</span> <?php echo htmlspecialchars($monitor['curso']); ?>
+                        <?php echo htmlspecialchars($monitor['curso']); ?>
                     </p>
                     
                     <div class="profile-stats">
                         <div class="stat-item">
-                            <span class="stat-icon">📚</span>
                             <div class="stat-content">
                                 <span class="stat-value"><?php echo $monitor['total_monitorias']; ?></span>
                                 <span class="stat-label">Monitorias cadastradas</span>
@@ -53,12 +57,10 @@ require_once __DIR__ . '/../src/controllers/visualizacao_monitor_dados.php';
                     <h2 class="section-title">Contato</h2>
                     <div class="contact-info">
                         <div class="contact-item">
-                            <span class="contact-icon">📧</span>
                             <span class="contact-text"><?php echo htmlspecialchars($monitor['email']); ?></span>
                         </div>
                         <div class="contact-item">
-                            <span class="contact-icon">📱</span>
-                            <span class="contact-text"><?php echo htmlspecialchars($monitor['telefone']); ?></span>
+                            <span class="contact-text"><?php echo htmlspecialchars(formatarTelefone($monitor['telefone'])); ?></span>
                         </div>
                     </div>
                 </div>
@@ -84,7 +86,6 @@ require_once __DIR__ . '/../src/controllers/visualizacao_monitor_dados.php';
                                     </span>
                                 </div>
                                 <p class="card-datetime">
-                                    <span class="datetime-icon">📅</span>
                                     <?php echo htmlspecialchars($monitoria['data']); ?> às <?php echo htmlspecialchars($monitoria['horario']); ?>
                                 </p>
                             </div>

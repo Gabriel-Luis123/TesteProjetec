@@ -1,455 +1,542 @@
-let currentContactId = null
-let messageRefreshInterval = null
-let selectedFile = null
-console.log("Chat JS carregado")
+
+let currentContactId = null;
+let messageRefreshInterval = null;
+let pendingFile = null;
+console.log("Chat JS carregado");
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadContacts()
-  setupEventListeners()
-})
+  loadContacts();
+  setupEventListeners();
+  setupInputListeners();
+});
+
 
 function setupEventListeners() {
-  const form = document.querySelector(".form-input")
+  const form = document.querySelector(".form-input");
   if (form) {
     form.addEventListener("submit", (e) => {
-      e.preventDefault()
-      sendMessage()
-    })
+      e.preventDefault();
+      sendMessage();
+    });
   }
 
-  document.addEventListener("click", (e) => {
-    if (e.target.closest(".contato-item")) {
-      const contactBox = e.target.closest(".contato-item")
-      const contactId = contactBox.dataset.id
-      selectContact(contactId)
-    }
-  })
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  if (pendingFile) {
+    await sendPendingFile();
+    clearPreview();
+    return;
+  }
 
-  const fileInput = document.getElementById("fileInput")
+  sendMessage();
+});
+
+
+
+  document.addEventListener("click", (e) => {
+    const box = e.target.closest(".caixa-nome");
+    if (!box) return;
+
+    const contactId = box.dataset.id;
+    if (!contactId) {
+      console.warn("Contato sem data-id:", box);
+      return;
+    }
+
+    selectContact(contactId);
+  });
+}
+
+function setupInputListeners() {
+  const textInput = document.getElementById("textInput");
+  if (textInput) {
+    textInput.addEventListener("keydown", async function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+
+        if (pendingFile) {
+          await sendPendingFile();
+          pendingFile = null;
+
+          const preview = document.getElementById("filePreview");
+          const wrapper = document.querySelector(".input-wrapper");
+
+          if (preview) {
+            preview.style.display = "none";
+            preview.innerHTML = "";
+          }
+
+          const fileInputEl = document.getElementById("fileInput");
+          if (fileInputEl) fileInputEl.value = "";
+
+          if (wrapper) wrapper.classList.remove("preview-active");
+          adjustInputPadding();
+
+          return;
+        }
+
+        const messageText = this.value.trim();
+        if (messageText !== "") sendMessage();
+      }
+    });
+  }
+
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", async function () {
+      const termo = this.value.trim();
+
+      const url =
+        termo.length > 0
+          ? `../src/controllers/chat_backend.php?action=search_contacts&q=${encodeURIComponent(termo)}`
+          : `../src/controllers/chat_backend.php?action=get_contacts`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.sucesso) renderContacts(data.contatos);
+      } catch (error) {
+        console.error("Erro ao pesquisar:", error);
+      }
+    });
+  }
+
+  const fileInput = document.getElementById("fileInput");
   if (fileInput) {
-    fileInput.addEventListener("change", handleFileSelect)
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+      const wrapper = document.querySelector(".input-wrapper");
+      const previewBox = document.getElementById("filePreview");
+
+      if (!file) {
+        pendingFile = null;
+        if (previewBox) previewBox.style.display = "none";
+        if (wrapper) wrapper.classList.remove("preview-active");
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Apenas imagens são permitidas!");
+        this.value = "";
+        return;
+      }
+
+      pendingFile = file;
+      if (previewBox) previewBox.innerHTML = "";
+
+      const previewElement = document.createElement("img");
+      previewElement.src = URL.createObjectURL(file);
+      previewElement.classList.add("preview-image");
+
+      const removeBtn = document.createElement("span");
+      removeBtn.textContent = "✖";
+      removeBtn.classList.add("remove-file");
+      removeBtn.onclick = () => {
+        pendingFile = null;
+        previewBox.style.display = "none";
+        previewBox.innerHTML = "";
+        fileInput.value = "";
+        wrapper.classList.remove("preview-active");
+        adjustInputPadding();
+      };
+
+      previewBox.appendChild(previewElement);
+      previewBox.appendChild(removeBtn);
+      previewBox.style.display = "flex";
+
+      wrapper.classList.add("preview-active");
+      setTimeout(adjustInputPadding, 20);
+    });
   }
 }
 
+
 async function loadContacts() {
   try {
-    const response = await fetch("../src/controllers/chat_backend.php?action=get_contacts")
-    const data = await response.json()
-
-    if (data.sucesso && data.contatos) {
-      renderContacts(data.contatos)
-    }
+    const response = await fetch("../src/controllers/chat_backend.php?action=get_contacts");
+    const data = await response.json();
+    if (data.sucesso && data.contatos) renderContacts(data.contatos);
   } catch (error) {
-    console.error("[v0] Erro ao carregar contatos:", error)
+    console.error("Erro ao carregar contatos:", error);
   }
 }
 
 function renderContacts(contatos) {
-  const container = document.querySelector(".lista-nomes")
-  if (!container) return
+  const container = document.querySelector(".lista-nomes");
+  if (!container) return;
 
-  container.innerHTML = ""
+  container.innerHTML = "";
 
   contatos.forEach((contato) => {
-    const contatoItem = document.createElement("div")
-    contatoItem.className = "contato-item"
-    contatoItem.dataset.id = contato.id
+    const caixa = document.createElement("div");
+    caixa.className = "caixa-nome";
 
-    const caixa = document.createElement("div")
-    caixa.className = "caixa-nome"
+    
+     const idValue =
+      contato.id ??
+      contato.ID ??
+      contato.id_contato ??
+      contato.user_id ??
+      contato.contato_id ??
+      contato.Registro_Academico ??
+      contato.ra ??
+      contato.registro ??
+      null;
 
-    const colorClass = getColorForDiscipline(contato.disciplina)
-    const disciplineName = extractDisciplineName(contato.disciplina)
-    const foto = contato.Foto_Perfil || "../public/img/fotosPerfil/perfilPadrao.png"
 
-    caixa.innerHTML = `
-            <div class="${colorClass}">
-                <div>
-                    <h1 class="nome-monitor">${contato.Nome}</h1>
-                    <p class="titulo-monitor-caixa-nome">${disciplineName}</p>
-                </div>
-            </div>
-            <div class="icone-contato" style="background-image: url('${foto}'); background-size: cover; background-position: center; background-repeat: no-repeat; border-radius: 50%;" alt="Foto de ${contato.Nome}"></div>
-        `
+    caixa.dataset.id = idValue ? String(idValue) : "";
 
-    contatoItem.appendChild(caixa)
-    container.appendChild(contatoItem)
-  })
-}
+    if (String(currentContactId) === String(idValue)) {
+      caixa.classList.add("selecionado");
 
-async function selectContact(contactId) {
-  currentContactId = contactId
-
-  if (messageRefreshInterval) {
-    clearInterval(messageRefreshInterval)
-  }
-
-  try {
-    const detailsFormData = new FormData()
-    detailsFormData.append("contact_id", contactId)
-
-    const detailsResponse = await fetch("../src/controllers/chat_backend.php?action=get_contact_details", {
-      method: "POST",
-      body: detailsFormData,
-    })
-    const detailsData = await detailsResponse.json()
-
-    if (detailsData.sucesso) {
-      updateHeaderContact(detailsData.contato)
+      console.log("Contato recebido:", contato);
     }
 
-    loadMessages(contactId)
+    const colorClass = getColorForDiscipline(contato.disciplina);
+    const disciplineName = extractDisciplineName(contato.disciplina);
+    const foto = contato.Foto_Perfil || "../public/img/fotosPerfil/perfilPadrao.png";
+    const nome = contato.Nome || "Sem nome";
 
-    messageRefreshInterval = setInterval(() => {
-      loadMessages(contactId)
-    }, 2000)
-  } catch (error) {
-    console.error("[v0] Erro ao selecionar contato:", error)
+    caixa.innerHTML = `
+      <div class="${colorClass}">
+        <div>
+          <h1 class="nome-monitor">${escapeHtml(nome)}</h1>
+          <p class="titulo-monitor-caixa-nome">${escapeHtml(disciplineName)}</p>
+        </div>
+      </div>
+      <div class="icone-contato" 
+           style="background-image: url('${foto}'); 
+                  background-size: cover; 
+                  background-position: center; 
+                  background-repeat: no-repeat; 
+                  border-radius: 50%;">
+      </div>
+    `;
+
+    container.appendChild(caixa);
+  });
+}
+
+function appendMessage(msg) {
+  const container = document.querySelector(".mensagens-container");
+  if (!container) return;
+
+  const isMe = Number(msg.remetente_id) === Number(getCurrentUserId());
+  const msgClass = isMe ? "direita" : "esquerda";
+
+  let content = "";
+
+  if (msg.arquivo_url) {
+    const ext = msg.arquivo_url.split(".").pop().toLowerCase();
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+      content = `<img src="${msg.arquivo_url}" class="img-preview">`;
+    } else {
+      content = `<a href="${msg.arquivo_url}" download>📎 Arquivo</a>`;
+    }
+  } else {
+    content = `<p>${escapeHtml(msg.conteudo || "")}</p>`;
+  }
+
+  const html = `
+      <div class="mensagens-geral ${msgClass}">
+        ${content}
+        <p class="hora">${escapeHtml(formatTime(msg.data_hora))}</p>
+      </div>
+  `;
+
+  container.insertAdjacentHTML("beforeend", html);
+  container.scrollTop = container.scrollHeight;
+}
+
+
+async function selectContact(id) {
+  try {
+    const resp = await fetch(
+      `../src/controllers/chat_backend.php?action=get_contact_details&id=${id}`
+    );
+
+    if (!resp.ok) throw new Error("Erro get_contact_details");
+
+    const data = await resp.json();
+
+    console.log("Resposta bruta get_contact_details:", data);
+
+    const contato = data.contato;
+
+    updateHeaderContact(contato);
+
+    currentContactId = contato.id;
+
+    loadMessages(currentContactId);
+
+  } catch (err) {
+    console.error("Erro ao obter detalhes do contato:", err);
   }
 }
 
+
 function updateHeaderContact(contato) {
-  const header = document.querySelector(".cabecalho-fundo")
-  const foto = contato.Foto_Perfil || "../public/img/fotosPerfil/perfilPadrao.png"
-  const disciplineName = extractDisciplineName(contato.disciplina)
-  const textoUsuario = disciplineName == "Aluno" ? "Aluno" : `Monitor de ${disciplineName}`
+  const header = document.querySelector(".cabecalho-fundo");
+  if (!header || !contato) return;
+
+  const nome = contato.Nome ?? "Sem nome";
+
+  const foto = contato.Foto_Perfil || "../public/img/fotosPerfil/perfilPadrao.png";
+
+  const disciplineName = extractDisciplineName(contato.disciplina);
+  const textoUsuario = disciplineName === "Aluno" ? "Aluno" : `Monitor de ${disciplineName}`;
 
   header.innerHTML = `
-        <div class="icone-cabecalho" style="background-image: url('${foto}'); background-size: cover; background-repeat: no-repeat; border-radius: 50%;" alt="Foto de ${contato.Nome}"></div>
+        <div class="icone-cabecalho" style="background-image: url('${foto}'); background-size: cover; background-repeat: no-repeat; border-radius: 50%;"></div>
         <div class="nome-titulo-monitor">
-            <h2>${contato.Nome}</h2>
-            <p class="titulo-monitor-cabecalho">${textoUsuario}</p>
+            <h2>${escapeHtml(nome)}</h2>
+            <p class="titulo-monitor-cabecalho">${escapeHtml(textoUsuario)}</p>
         </div>
-    `
+    `;
 }
+
 
 async function loadMessages(contactId) {
   try {
-    const formData = new FormData()
-    formData.append("contact_id", contactId)
+    const formData = new FormData();
+    formData.append("contact_id", contactId);
 
     const response = await fetch("../src/controllers/chat_backend.php?action=get_messages", {
       method: "POST",
       body: formData,
-    })
+    });
 
-    const data = await response.json()
-
-    if (data.sucesso && data.mensagens) {
-      renderMessages(data.mensagens, contactId)
-    }
+    const data = await response.json();
+    if (data.sucesso) renderMessages(data.mensagens);
   } catch (error) {
-    console.error("[v0] Erro ao carregar mensagens:", error)
+    console.error("Erro ao carregar mensagens:", error);
   }
 }
 
 function formatFullDate(timestamp) {
-  const date = new Date(timestamp)
-
-  const day = date.getDate()
-
-  const monthNames = [
-    "janeiro",
-    "fevereiro",
-    "março",
-    "abril",
-    "maio",
-    "junho",
-    "julho",
-    "agosto",
-    "setembro",
-    "outubro",
-    "novembro",
-    "dezembro",
-  ]
-
-  const month = monthNames[date.getMonth()]
-
-  return `${day} de ${month}`
+  const date = new Date(timestamp);
+  if (isNaN(date)) return "";
+  const months = [
+    "janeiro","fevereiro","março","abril","maio","junho",
+    "julho","agosto","setembro","outubro","novembro","dezembro"
+  ];
+  return `${date.getDate()} de ${months[date.getMonth()]}`;
 }
 
-function renderMessages(mensagens, contactId) {
-  const container = document.querySelector(".mensagens-container")
-  if (!container) return
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  if (isNaN(date)) return "";
+  return `${String(date.getHours()).padStart(2, "0")}:${String(
+    date.getMinutes()
+  ).padStart(2, "0")}`;
+}
 
-  let newHTML = ""
-  let lastDate = null
+function renderMessages(mensagens) {
+  const container = document.querySelector(".mensagens-container");
+  if (!container) return;
+
+  
+
+  let newHTML = "";
+  let lastDate = null;
 
   mensagens.forEach((msg) => {
-    const isCurrentUserSender = msg.remetente_id === getCurrentUserId()
-    const messageClass = isCurrentUserSender ? "direita" : "esquerda"
+    const isMe = Number(msg.remetente_id) === Number(getCurrentUserId());
+    const msgClass = isMe ? "direita" : "esquerda";
 
-    const msgDateFormatted = msg.data_formatada
+    const dateFormatted = msg.data_formatada || formatFullDate(msg.data_hora);
 
-    if (lastDate !== msgDateFormatted) {
-      newHTML += `
-          <div class="chat-date">${msgDateFormatted}</div>
-      `
-      lastDate = msgDateFormatted
+    if (dateFormatted !== lastDate) {
+      newHTML += `<div class="chat-date">${escapeHtml(dateFormatted)}</div>`;
+      lastDate = dateFormatted;
     }
 
-    const horario = msg.data_hora ? formatTime(msg.data_hora) : ""
-
-    let conteudoHTML = ""
+    let content = "";
 
     if (msg.arquivo_url) {
-      const ext = msg.arquivo_url.split(".").pop().toLowerCase()
-
-      if (["png", "jpg", "jpeg", "gif", "webp"].includes(ext)) {
-        conteudoHTML = `
-            <div class="imagem-msg">
-                <img src="${msg.arquivo_url}" class="img-preview">
-            </div>
-        `
+      const ext = msg.arquivo_url.split(".").pop().toLowerCase();
+      if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+        content = `<img src="${msg.arquivo_url}" class="img-preview">`;
       } else {
-        const name = msg.conteudo || "Arquivo enviado"
-        conteudoHTML = `
-            <a href="${msg.arquivo_url}" download class="arquivo-link">
-                📎 ${name}
-            </a>
-        `
+        content = `<a href="${msg.arquivo_url}" download>📎 Arquivo</a>`;
       }
     } else {
-      conteudoHTML = `<p class="texto">${escapeHtml(msg.conteudo)}</p>`
+      content = `<p>${escapeHtml(msg.conteudo)}</p>`;
     }
 
     newHTML += `
-        <div class="mensagens-geral ${messageClass}">
-            ${conteudoHTML}
-            <p class="hora">${horario}</p>
-        </div>
-    `
-  })
+      <div class="mensagens-geral ${msgClass}">
+        ${content}
+        <p class="hora">${escapeHtml(formatTime(msg.data_hora))}</p>
+      </div>
+    `;
+  });
 
-  container.innerHTML = newHTML
-  container.scrollTop = container.scrollHeight
+  container.innerHTML = newHTML;
+  container.scrollTop = container.scrollHeight;
 }
 
+
 async function sendMessage() {
-  if (!currentContactId) {
-    alert("Selecione um contato primeiro")
-    return
-  }
+  if (!currentContactId) return alert("Selecione um contato");
 
-  if (selectedFile) {
-    await sendFile()
-    return
-  }
+  const input = document.getElementById("textInput");
+  const text = input.value.trim();
 
-  const input = document.querySelector('input[name="text"]')
-  const messageText = input.value.trim()
+  if (!text) return;
 
-  if (!messageText) return
+  const formData = new FormData();
+  formData.append("contact_id", currentContactId);
+  formData.append("mensagem", text);
 
   try {
-    const formData = new FormData()
-    formData.append("contact_id", currentContactId)
-    formData.append("mensagem", messageText)
-
     const response = await fetch("../src/controllers/chat_backend.php?action=send_message", {
       method: "POST",
       body: formData,
-    })
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (data.sucesso) {
-      input.value = ""
-      loadMessages(currentContactId)
+      // Se o backend retornou o objeto da mensagem, usa-o.
+      if (data.mensagem) {
+        appendMessage(data.mensagem);
+      } else {
+        // fallback: montar um objeto local (temporário)
+        const tempMsg = {
+          remetente_id: getCurrentUserId(),
+          destinatario_id: currentContactId,
+          conteudo: text,
+          arquivo_url: null,
+          data_hora: new Date().toISOString()
+        };
+        appendMessage(tempMsg);
+      }
+      input.value = "";
+      // opcional: recarregar do servidor pra garantir sincronização
+      // await loadMessages(currentContactId);
     } else {
-      alert("Erro: " + data.erro)
+      console.error("Erro ao enviar mensagem:", data);
+      alert(data.erro || "Erro ao enviar mensagem");
     }
   } catch (error) {
-    console.error("[v0] Erro ao enviar mensagem:", error)
-    alert("Erro ao enviar mensagem")
+    console.error("Erro ao enviar mensagem:", error);
+    alert("Erro ao enviar mensagem");
   }
 }
 
-async function sendFile() {
-  if (!currentContactId) {
-    alert("Selecione um contato primeiro")
-    return
-  }
 
-  if (!selectedFile) return
+async function sendPendingFile() {
+  if (!pendingFile || !currentContactId) return;
 
-  const formData = new FormData()
-  formData.append("contact_id", currentContactId)
-  formData.append("file", selectedFile)
+  const formData = new FormData();
+  formData.append("contact_id", currentContactId);
+  formData.append("file", pendingFile);
 
   try {
     const response = await fetch("../src/controllers/chat_backend.php?action=send_file", {
       method: "POST",
       body: formData,
-    })
+    });
 
-    const data = await response.json()
+    const data = await response.json();
 
     if (data.sucesso) {
-      clearFilePreview()
-      loadMessages(currentContactId)
+      if (data.mensagem) {
+        appendMessage(data.mensagem);
+      } else if (data.file_url) {
+        const tempMsg = {
+          remetente_id: getCurrentUserId(),
+          destinatario_id: currentContactId,
+          conteudo: null,
+          arquivo_url: data.file_url,
+          data_hora: new Date().toISOString()
+        };
+        appendMessage(tempMsg);
+      }
+      clearPreview();
     } else {
-      alert("Erro ao enviar arquivo: " + data.erro)
+      console.error("Erro ao enviar arquivo:", data);
+      alert(data.erro || "Erro ao enviar arquivo");
     }
   } catch (error) {
-    console.error("Erro ao enviar arquivo:", error)
-    alert("Erro ao enviar arquivo")
+    console.error("Erro ao enviar arquivo:", error);
+    alert("Erro ao enviar arquivo");
   }
 }
 
-function handleFileSelect(e) {
-  const file = e.target.files[0]
-  if (!file) return
 
-  selectedFile = file
-  showFilePreview(file)
-}
 
-function showFilePreview(file) {
-  const inputContainer = document.querySelector(".input-container")
-
-  // Remove existing preview if any
-  const existingPreview = document.querySelector(".file-preview-container")
-  if (existingPreview) {
-    existingPreview.remove()
-  }
-
-  // Create preview container
-  const previewContainer = document.createElement("div")
-  previewContainer.className = "file-preview-container"
-
-  const ext = file.name.split(".").pop().toLowerCase()
-  const isImage = ["png", "jpg", "jpeg", "gif", "webp"].includes(ext)
-
-  if (isImage) {
-    // Show image preview
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      previewContainer.innerHTML = `
-        <div class="file-preview-content">
-          <img src="${e.target.result}" class="file-preview-image" alt="Preview">
-          <div class="file-preview-info">
-            <span class="file-preview-name">${file.name}</span>
-            <button type="button" class="file-preview-remove" onclick="clearFilePreview()">✕</button>
-          </div>
-        </div>
-      `
-    }
-    reader.readAsDataURL(file)
-  } else {
-    // Show file icon and name
-    const fileIcon = getFileIcon(ext)
-    previewContainer.innerHTML = `
-      <div class="file-preview-content">
-        <div class="file-preview-icon">${fileIcon}</div>
-        <div class="file-preview-info">
-          <span class="file-preview-name">${file.name}</span>
-          <span class="file-preview-size">${formatFileSize(file.size)}</span>
-          <button type="button" class="file-preview-remove" onclick="clearFilePreview()">✕</button>
-        </div>
-      </div>
-    `
-  }
-
-  // Insert preview before the form
-  inputContainer.insertBefore(previewContainer, inputContainer.firstChild)
-}
-
-function clearFilePreview() {
-  selectedFile = null
-  const fileInput = document.getElementById("fileInput")
-  if (fileInput) {
-    fileInput.value = ""
-  }
-
-  const previewContainer = document.querySelector(".file-preview-container")
-  if (previewContainer) {
-    previewContainer.remove()
-  }
-}
-
-function getFileIcon(ext) {
-  const icons = {
-    pdf: "📄",
-    doc: "📝",
-    docx: "📝",
-    zip: "🗜️",
-    rar: "🗜️",
-    txt: "📃",
-    ppt: "📊",
-    pptx: "📊",
-  }
-  return icons[ext] || "📎"
-}
-
-function formatFileSize(bytes) {
-  if (bytes < 1024) return bytes + " B"
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB"
-  return (bytes / (1024 * 1024)).toFixed(1) + " MB"
-}
 
 function getCurrentUserId() {
-  return window.CurrentUserId
-}
-
-function formatTime(timestamp) {
-  const date = new Date(timestamp)
-  const hours = String(date.getHours()).padStart(2, "0")
-  const minutes = String(date.getMinutes()).padStart(2, "0")
-  return `${hours}:${minutes}`
+  return window.CurrentUserId;
 }
 
 function getColorForDiscipline(disciplina) {
-  if (!disciplina) return "caixa-aluno"
+  if (!disciplina) return "caixa-aluno";
 
-  const disciplinaLower = disciplina.toLowerCase()
-
-  if (disciplinaLower.includes("matemática")) return "caixa-matematica"
-  if (disciplinaLower.includes("português")) return "caixa-portugues"
-  if (disciplinaLower.includes("história")) return "caixa-historia"
-  if (disciplinaLower.includes("eletrônica") || disciplinaLower.includes("analógica")) return "caixa-elet-analogica"
-  if (disciplinaLower.includes("biologia")) return "caixa-biologia"
-  if (disciplinaLower.includes("química")) return "caixa-quimica"
-  if (disciplinaLower.includes("física")) return "caixa-fisica"
-  if (disciplinaLower.includes("filosofia")) return "caixa-filosofia"
-  if (disciplinaLower.includes("web")) return "caixa-WEB"
-  if (disciplinaLower.includes("geografia")) return "caixa-geografia"
-
-  return "caixa-aluno"
+  const d = disciplina.toLowerCase();
+  if (d.includes("matemática")) return "caixa-matematica";
+  if (d.includes("português")) return "caixa-portugues";
+  if (d.includes("história")) return "caixa-historia";
+  if (d.includes("eletrônica")) return "caixa-elet-analogica";
+  if (d.includes("biologia")) return "caixa-biologia";
+  if (d.includes("química")) return "caixa-quimica";
+  if (d.includes("física")) return "caixa-fisica";
+  if (d.includes("filosofia")) return "caixa-filosofia";
+  if (d.includes("web")) return "caixa-WEB";
+  if (d.includes("geografia")) return "caixa-geografia";
+  if (d.includes("inglês")) return "caixa-ingles";
+  if (d.includes("artes")) return "caixa-artes";
+  if (d.includes("sociologia")) return "caixa-sociologia";
+  if (d.includes("geografafia")) return "caixa-geografia";
+  if (d.includes("banco")) return "caixa-banco-de-dados";
+  return "caixa-aluno";
 }
 
 function extractDisciplineName(disciplina) {
-  if (!disciplina) return "Aluno"
-  return disciplina.split("-")[0].trim()
+  if (!disciplina) return "Aluno";
+  return String(disciplina).split("-")[0].trim();
 }
 
+function adjustInputPadding() {
+  const input = document.getElementById("textInput");
+  const wrapper = document.querySelector(".input-wrapper");
+
+  if (wrapper.classList.contains("preview-active")) {
+    input.style.paddingLeft = "120px"; // espaço pro preview
+  } else {
+    input.style.paddingLeft = "15px"; // padrão
+  }
+}
+
+function clearPreview() {
+  pendingFile = null;
+
+  const previewBox = document.getElementById("filePreview");
+  const wrapper = document.querySelector(".input-wrapper");
+  const fileInputEl = document.getElementById("fileInput");
+
+  if (previewBox) {
+    previewBox.style.display = "none";
+    previewBox.innerHTML = "";
+  }
+
+  if (fileInputEl) fileInputEl.value = "";
+
+  if (wrapper) wrapper.classList.remove("preview-active");
+
+  adjustInputPadding();
+}
+
+
 function escapeHtml(text) {
+  text = text == null ? "" : String(text);
   const map = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#039;",
-  }
-  return text.replace(/[&<>"']/g, (m) => map[m])
+  };
+  return text.replace(/[&<>"']/g, (m) => map[m]);
 }
-
-document.getElementById("searchInput").addEventListener("input", async function () {
-  const termo = this.value.trim()
-
-  const url =
-    termo.length > 0
-      ? `../src/controllers/chat_backend.php?action=search_contacts&q=${encodeURIComponent(termo)}`
-      : `../src/controllers/chat_backend.php?action=get_contacts`
-
-  try {
-    const response = await fetch(url)
-    const data = await response.json()
-
-    if (data.sucesso) {
-      renderContacts(data.contatos)
-    }
-  } catch (error) {
-    console.error("Erro ao pesquisar contatos:", error)
-  }
-})

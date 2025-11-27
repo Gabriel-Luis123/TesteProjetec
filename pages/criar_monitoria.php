@@ -89,7 +89,27 @@ require_once __DIR__ . '/../src/controllers/criar_monitoria_dados.php';
     </form>
 </div>
 
+<script>
+// Quando o formulário for enviado
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('#form-monitoria');
+    const dataInput = document.querySelector('#inputData'); // ID do seu input de data
 
+    form.addEventListener('submit', function(e) {
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0); // zera horário para comparação correta
+
+        const dataEscolhida = new Date(dataInput.value);
+
+        if (dataEscolhida < hoje) {
+            e.preventDefault(); // impede envio
+            alert("A data da monitoria não pode ser anterior ao dia atual!");
+            dataInput.focus();
+        }
+    });
+});
+</script>
 
 <script>
     let conteudos = [];

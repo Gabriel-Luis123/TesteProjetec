@@ -90,12 +90,10 @@ $cores_materias = $cores_lista_monitorias;
                             </span>
 
                             <div class="info-item">
-                                <span class="info-icon">🕐</span>
                                 <span><?= $monitoria['dia_semana'] ?> <?= $monitoria['horario'] ?></span>
                             </div>
 
                             <div class="info-item">
-                                <span class="info-icon">📍</span>
                                 <span>Sala <?= $monitoria['local'] ?></span>
                             </div>
 

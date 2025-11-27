@@ -47,13 +47,38 @@ foreach ($monitorias as $row) {
     $publico = $publico_alvo[$materia] ?? "Alunos interessados";
 
     $status = $row['Concluida'] ? "concluido" : "em_espera";
-    $conteudosArray = json_decode($row['Conteudos_Abordados'], true);
+    
+    $raw = $row['Conteudos_Abordados'];
 
-    $primeiroConteudo = $conteudosArray[0] ?? '';
+    $raw = trim($raw);
+    $raw = trim($raw, "\"");
+
+    $raw = stripslashes($raw);
+
+    $conteudosArray = json_decode($raw, true);
+
+    if (!is_array($conteudosArray)) {
+
+        $raw2 = trim($raw, "\"");
+        $conteudosArray = json_decode($raw2, true);
+    }
+
+    if (is_array($conteudosArray)) {
+
+        $conteudosArray = array_map(function($item) {
+            return ucwords(mb_strtolower(trim($item)));
+        }, $conteudosArray);
+
+        $conteudosString = implode(', ', $conteudosArray);
+
+    } else {
+        $conteudosString = $monitoria['Conteudos_Abordados'];
+    }
+
 
     $inscricoes[] = [
         'id' => $row['ID_Monitoria'],
-        'disciplina' => $primeiroConteudo,      
+        'disciplina' => $conteudosString,      
         'materia' => $materia,                            
         'ano' => $ano,                                    
         'foto' => $row['foto_monitor'],

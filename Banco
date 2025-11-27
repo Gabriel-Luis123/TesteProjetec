@@ -148,5 +148,12 @@ CREATE TABLE IF NOT EXISTS Mensagens (
     INDEX idx_timestamp (data_hora)
 );
 
+ALTER TABLE Mensagens 
+ADD COLUMN tipo ENUM('texto', 'arquivo') NOT NULL DEFAULT 'texto',
+ADD COLUMN arquivo_url VARCHAR(255) DEFAULT NULL;
+
+ALTER TABLE Mensagens 
+MODIFY conteudo TEXT NULL;
+
 use bd_monifacil;
 SELECT * FROM Aluno;

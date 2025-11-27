@@ -1,11 +1,10 @@
-
-<?php if(basename($_SERVER['PHP_SELF']) !== 'login.php'): ?>
+<?php if (basename($_SERVER['PHP_SELF']) !== 'login.php' && basename($_SERVER['PHP_SELF']) !== 'chat.php'): ?>
     <footer>
         <p>&copy; 2025 Sistema de Monitoria. Todos os direitos reservados.</p>
         <p>Contato: monifacil@gmail.com</p>
     </footer>
-<?php else: ?>
 <?php endif; ?>
+
 
 
 

@@ -156,12 +156,10 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
     <div class="content-grid">
         <div class="card">
             <h2 class="card-title">
-                <span class="card-icon">📋</span>
                 Informações Gerais
             </h2>
             <div class="info-grid">
                 <div class="info-item">
-                    <span class="info-icon">📅</span>
                     <div class="info-content">
                         <div class="info-label">Data da Sessão</div>
                         <div class="info-value"><?php echo date('d/m/Y', strtotime($monitoria['proxima_sessao'])); ?></div>
@@ -169,7 +167,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
                 </div>
 
                 <div class="info-item">
-                    <span class="info-icon">🕐</span>
                     <div class="info-content">
                         <div class="info-label">Horário</div>
                         <div class="info-value"><?php echo $monitoria['horario']; ?></div>
@@ -177,7 +174,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
                 </div>
 
                 <div class="info-item">
-                    <span class="info-icon">📍</span>
                     <div class="info-content">
                         <div class="info-label">Local</div>
                         <div class="info-value"><?php echo $monitoria['local']; ?></div>
@@ -185,7 +181,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
                 </div>
 
                 <div class="info-item">
-                    <span class="info-icon">⏱</span>
                     <div class="info-content">
                         <div class="info-label">Duração</div>
                         <div class="info-value">1 hora</div>
@@ -232,7 +227,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
 
         <div class="card">
             <h2 class="card-title">
-                <span class="card-icon">📚</span>
                 Conteúdo Programático
             </h2>
             <ul class="lista-topicos">
@@ -244,7 +238,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
 
         <div class="card">
             <h2 class="card-title">
-                <span class="card-icon">👨‍🏫</span>
                 Professores Responsáveis
             </h2>
             <div class="professores-list">
@@ -253,7 +246,6 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
                 foreach ($professores as $professor):
                 ?>
                     <div class="professor-item">
-                        <span class="professor-icon">👤</span>
                         <span class="professor-name"><?php echo $professor; ?></span>
                     </div>
                 <?php endforeach; ?>
@@ -262,11 +254,9 @@ $dias_para_sessao = diasParaSessao($monitoria['proxima_sessao']);
 
         <div class="card">
             <h2 class="card-title">
-                <span class="card-icon">🎯</span>
                 Público Alvo
             </h2>
             <div class="info-item">
-                <span class="info-icon">👥</span>
                 <div class="info-content">
                     <div class="info-value"><?php echo $monitoria['publico_alvo']; ?></div>
                 </div>

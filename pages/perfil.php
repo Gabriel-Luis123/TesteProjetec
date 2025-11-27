@@ -52,10 +52,7 @@ unset($_SESSION['mensagem_erro']);
                                 <label class="form-label">Curso</label>
                                 <input type="text" class="form-input" value="<?php echo htmlspecialchars($usuario['curso']); ?>" disabled>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Telefone</label>
-                                <input type="text" class="form-input" value="<?php echo htmlspecialchars($usuario['telefone']); ?>" disabled>
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -65,6 +62,10 @@ unset($_SESSION['mensagem_erro']);
                             <div class="form-group">
                                 <label class="form-label">Email</label>
                                 <input type="email" name="email" class="form-input editable" value="<?php echo htmlspecialchars($usuario['email']); ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telefone</label>
+                                <input type="text" name="telefone" class="form-input editable" value="<?php echo htmlspecialchars($usuario['telefone']); ?>" required>
                             </div>
                         </div>
                     </div>

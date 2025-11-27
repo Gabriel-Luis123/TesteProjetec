@@ -1,12 +1,26 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ob_start(); 
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../../logs/php-error.log');
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/../utils/con_db.php';
 session_start();
 
-if (!isset($_SESSION['status'])) {
-    http_response_code(401);
-    echo json_encode(['erro' => 'Não autorizado']);
+function respond($statusCode, $data) {
+    while (ob_get_level()) ob_end_clean();
+
+    http_response_code($statusCode);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+if (!isset($_SESSION['status']) || empty($_SESSION['registro'])) {
+    respond(401, ['erro' => 'Não autorizado']);
 }
 
 $action = $_GET['action'] ?? '';
@@ -18,244 +32,220 @@ $stmt_current->execute();
 $current_user = $stmt_current->fetch(PDO::FETCH_ASSOC);
 
 if (!$current_user) {
-    http_response_code(401);
-    echo json_encode(['erro' => 'Usuário não encontrado']);
-    exit;
+    respond(401, ['erro' => 'Usuário não encontrado']);
 }
 
 if ($action === 'get_contacts') {
-    $current_id = $_SESSION['registro'];
-    
+
     $sql = "SELECT DISTINCT
             a.Registro_Academico as id,
             a.Nome,
             a.Foto_Perfil,
             m.disciplina_monitorada as disciplina,
-            MAX(msg.data_hora) as ultima_mensagem,
-            msg.data_hora as data_mensagem
+            MAX(msg.data_hora) as ultima_mensagem
         FROM Aluno a
         LEFT JOIN Monitora m ON a.Registro_Academico = m.Registro_Academico
-        LEFT JOIN Mensagens msg ON (msg.remetente_id = :current_id AND msg.destinatario_id = a.Registro_Academico)
-                                OR (msg.remetente_id = a.Registro_Academico AND msg.destinatario_id = :current_id)
-        WHERE a.Registro_Academico != :current_id
-        GROUP BY a.Registro_Academico, a.Nome, a.Foto_Perfil, m.disciplina_monitorada
+        LEFT JOIN Mensagens msg 
+            ON (msg.remetente_id = :id AND msg.destinatario_id = a.Registro_Academico)
+            OR (msg.remetente_id = a.Registro_Academico AND msg.destinatario_id = :id)
+        WHERE a.Registro_Academico != :id
+        GROUP BY a.Registro_Academico
         ORDER BY ultima_mensagem DESC, a.Nome ASC";
-    
+
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':current_id', $current_id);
+    $stmt->bindValue(':id', $_SESSION['registro']);
     $stmt->execute();
-    $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode(['sucesso' => true, 'contatos' => $contacts]);
-    exit;
+
+    respond(200, ['sucesso' => true, 'contatos' => $stmt->fetchAll(PDO::FETCH_ASSOC)]);
+}
+if ($action === 'get_contact_details') {
+
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        respond(400, ['erro' => 'ID não informado']);
+    }
+
+    $sql = "SELECT 
+                a.Registro_Academico as id,
+                a.Nome,
+                a.Foto_Perfil,
+                m.disciplina_monitorada AS disciplina
+            FROM Aluno a
+            LEFT JOIN Monitora m 
+                ON a.Registro_Academico = m.Registro_Academico
+            WHERE a.Registro_Academico = :id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(":id", $id);
+    $stmt->execute();
+
+    $contato = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$contato) {
+        respond(404, ['erro' => 'Contato não encontrado']);
+    }
+
+    respond(200, ['sucesso' => true, 'contato' => $contato]);
 }
 
 if ($action === 'get_messages') {
-    $contact_id = $_POST['contact_id'] ?? '';
-    $current_id = $_SESSION['registro'];
-    
-    if (empty($contact_id)) {
-        http_response_code(400);
-        echo json_encode(['erro' => 'ID de contato não fornecido']);
-        exit;
+
+    $contact_id = $_POST["contact_id"] ?? null;
+
+    if (!$contact_id) {
+        respond(400, ['erro' => 'ID de contato ausente']);
     }
-    
-    $sql = "SELECT * FROM Mensagens 
-            WHERE (remetente_id = :current_id AND destinatario_id = :contact_id)
-            OR (remetente_id = :contact_id AND destinatario_id = :current_id)
+
+    $sql = "SELECT * FROM Mensagens
+            WHERE (remetente_id = :me AND destinatario_id = :c)
+               OR (remetente_id = :c AND destinatario_id = :me)
             ORDER BY data_hora ASC";
-    
+
     $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':current_id', $current_id);
-    $stmt->bindParam(':contact_id', $contact_id);
+    $stmt->bindValue(':me', $_SESSION['registro']);
+    $stmt->bindValue(':c', $contact_id);
     $stmt->execute();
-    
-    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($messages as &$msg) {
-    $timestamp = strtotime($msg['data_hora']);
-    $meses = [
-        1 => 'janeiro', 2 => 'fevereiro', 3 => 'março', 4 => 'abril',
-        5 => 'maio', 6 => 'junho', 7 => 'julho', 8 => 'agosto',
-        9 => 'setembro', 10 => 'outubro', 11 => 'novembro', 12 => 'dezembro'
-    ];
+    $msgs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $dia = date('j', $timestamp);
-    $mes = $meses[(int)date('n', $timestamp)];
-
-    $msg['data_formatada'] = "$dia de $mes";
-    }
-
-    echo json_encode(['sucesso' => true, 'mensagens' => $messages]);
-    exit;
+    respond(200, ['sucesso' => true, 'mensagens' => $msgs]);
 }
 
+/* -------------------- SEND MESSAGE -------------------- */
 if ($action === 'send_message') {
-    $contact_id = $_POST['contact_id'] ?? '';
-    $message_text = $_POST['mensagem'] ?? '';
-    $current_id = $_SESSION['registro'];
-    
-    if (empty($contact_id) || empty($message_text)) {
-        http_response_code(400);
-        echo json_encode(['erro' => 'Dados incompletos']);
-        exit;
-    }
-    
-    if ($contact_id === $current_id) {
-        http_response_code(400);
-        echo json_encode(['erro' => 'Você não pode enviar mensagens para si mesmo']);
-        exit;
-    }
-    
-    $sql_verify = "SELECT Registro_Academico FROM Aluno WHERE Registro_Academico = :contact_id";
-    $stmt_verify = $pdo->prepare($sql_verify);
-    $stmt_verify->bindParam(':contact_id', $contact_id);
-    $stmt_verify->execute();
-    
-    if (!$stmt_verify->fetch()) {
-        http_response_code(400);
-        echo json_encode(['erro' => 'Contato não existe']);
-        exit;
-    }
-    
-    $sql_insert = "INSERT INTO Mensagens (remetente_id, destinatario_id, conteudo, data_hora) 
-                   VALUES (:remetente_id, :destinatario_id, :conteudo, NOW())";
-    
-    $stmt_insert = $pdo->prepare($sql_insert);
-    $stmt_insert->bindParam(':remetente_id', $current_id);
-    $stmt_insert->bindParam(':destinatario_id', $contact_id);
-    $stmt_insert->bindParam(':conteudo', $message_text);
-    
-    if ($stmt_insert->execute()) {
-        echo json_encode(['sucesso' => true, 'mensagem' => 'Mensagem enviada com sucesso']);
-        exit;
-    } else {
-        http_response_code(500);
-        echo json_encode(['erro' => 'Erro ao enviar mensagem']);
-        exit;
-    }
-}
 
-if ($action === 'send_file') {
-    $contact_id = $_POST['contact_id'] ?? '';
-    $current_id = $_SESSION['registro'];
+    $text = trim($_POST['mensagem'] ?? '');
+    $contact = $_POST['contact_id'] ?? null;
 
-    if (empty($contact_id)) {
-        echo json_encode(['erro' => 'Contato inválido']);
-        exit;
+    if (!$text || !$contact) {
+        respond(400, ['erro' => 'Dados incompletos']);
     }
 
-    if (!isset($_FILES['file'])) {
-        echo json_encode(['erro' => 'Nenhum arquivo enviado']);
-        exit;
+    if ($contact == $_SESSION['registro']) {
+        respond(400, ['erro' => 'Não é possível enviar mensagem para si mesmo']);
     }
 
-    $file = $_FILES['file'];
-
-    $allowed = ['png','jpg','jpeg','gif','webp','pdf','doc','docx','zip','rar','txt','ppt','pptx'];
-    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-
-    if (!in_array($ext, $allowed)) {
-        echo json_encode(['erro' => 'Tipo de arquivo não permitido']);
-        exit;
-    }
-
-    $uploadDir = __DIR__ . "/../../uploads/chat/";
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
-    $newName = uniqid() . "." . $ext;
-    $filePath = $uploadDir . $newName;
-
-    if (!move_uploaded_file($file['tmp_name'], $filePath)) {
-        echo json_encode(['erro' => 'Falha ao salvar arquivo']);
-        exit;
-    }
-
-    $fileURL = "../uploads/chat/" . $newName;
-
-    $sql = "INSERT INTO Mensagens 
-            (remetente_id, destinatario_id, conteudo, arquivo_url, data_dia, data_hora) 
-            VALUES 
-            (:r, :d, :conteudo, :arquivo, CURDATE(), NOW())";
-
+    // Inserir
+    $sql = "INSERT INTO Mensagens (remetente_id, destinatario_id, conteudo, data_hora)
+            VALUES (:r, :d, :c, NOW())";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':r', $current_id);
-    $stmt->bindValue(':d', $contact_id);
-    $stmt->bindValue(':conteudo', $file['name']);
-    $stmt->bindValue(':arquivo', $fileURL);
+    $stmt->execute([
+        ':r' => $_SESSION['registro'],
+        ':d' => $contact,
+        ':c' => $text
+    ]);
 
-    if ($stmt->execute()) {
-        echo json_encode(['sucesso' => true]);
-        exit;
-    } else {
-        echo json_encode(['erro' => 'Erro ao salvar no banco']);
-        exit;
-    }
+    // Pegar a mensagem inserida (assumindo id autoincrement)
+    $lastId = $pdo->lastInsertId();
+    $fetchSql = "SELECT * FROM Mensagens WHERE id = :id LIMIT 1";
+    $fstmt = $pdo->prepare($fetchSql);
+    $fstmt->execute([':id' => $lastId]);
+    $mensagem = $fstmt->fetch(PDO::FETCH_ASSOC);
+
+    respond(200, ['sucesso' => true, 'mensagem' => $mensagem]);
 }
 
-if ($action === 'get_contact_details') {
-    $contact_id = $_POST['contact_id'] ?? '';
-    
-    if (empty($contact_id)) {
-        http_response_code(400);
-        echo json_encode(['erro' => 'ID de contato não fornecido']);
-        exit;
-    }
-    
-    $sql = "SELECT 
-            a.Registro_Academico as id,
-            a.Nome,
-            a.Foto_Perfil,
-            m.disciplina_monitorada as disciplina
-        FROM Aluno a
-        LEFT JOIN Monitora m ON a.Registro_Academico = m.Registro_Academico
-        WHERE a.Registro_Academico = :contact_id";
-    
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':contact_id', $contact_id);
-    $stmt->execute();
-    
-    $contact = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($contact) {
-        echo json_encode(['sucesso' => true, 'contato' => $contact]);
-    } else {
-        http_response_code(404);
-        echo json_encode(['erro' => 'Contato não encontrado']);
-    }
-    exit;
-}
 
 if ($action === 'search_contacts') {
 
-    $search = $_GET['q'] ?? '';
-    $current_id = $_SESSION['registro'];
-    $sql = "SELECT DISTINCT 
-                a.Registro_Academico as id, 
-                a.Nome, 
+    $q = trim($_GET['q'] ?? '');
+
+    $sql = "SELECT DISTINCT
+                a.Registro_Academico as id,
+                a.Nome,
                 a.Foto_Perfil,
                 m.disciplina_monitorada as disciplina
             FROM Aluno a
             LEFT JOIN Monitora m ON a.Registro_Academico = m.Registro_Academico
-            WHERE a.Registro_Academico != :current_id
-              AND a.Nome LIKE :search
-            ORDER BY a.Nome ASC";
+            WHERE a.Registro_Academico != :me
+              ";
+
+    if ($q !== '') {
+        $sql .= " AND (a.Nome LIKE :q OR a.Registro_Academico LIKE :q OR m.disciplina_monitorada LIKE :q)";
+    }
+
+    $sql .= " ORDER BY a.Nome ASC";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':current_id', $current_id);
-    $stmt->bindValue(':search', "%$search%", PDO::PARAM_STR);
+    $stmt->bindValue(':me', $_SESSION['registro']);
+
+    if ($q !== '') {
+        $like = "%{$q}%";
+        $stmt->bindValue(':q', $like, PDO::PARAM_STR);
+    }
+
     $stmt->execute();
+    $contatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    echo json_encode(['sucesso' => true, 'contatos' => $contacts]);
-    exit;
+    respond(200, ['sucesso' => true, 'contatos' => $contatos]);
 }
 
-http_response_code(400);
-echo json_encode(['erro' => 'Ação não reconhecida']);
-exit;
 
-?>
+if ($action === 'send_file') {
+
+error_log("=== DEBUG SEND_FILE ===");
+error_log("DOCUMENT_ROOT=" . $_SERVER['DOCUMENT_ROOT']);
+error_log("UPLOAD_DIR=" . $uploadDir);
+error_log("FILES=" . print_r($_FILES, true));
+error_log("POST=" . print_r($_POST, true));
+
+    if (!isset($_FILES['file'])) {
+        respond(400, ['erro' => 'Nenhum arquivo recebido']);
+    }
+
+    $contact_id = $_POST['contact_id'] ?? null;
+
+    if (!$contact_id) {
+        respond(400, ['erro' => 'Contato não informado']);
+    }
+
+    if ($contact_id == $_SESSION['registro']) {
+        respond(400, ['erro' => 'Não é possível enviar arquivo para si mesmo']);
+    }
+
+    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . "/projetecmainec2/Projeto/uploads/chat/";
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $filename = "chat_" . uniqid() . "." . pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
+    $filePath = $uploadDir . $filename;
+
+    if (!move_uploaded_file($_FILES['file']['tmp_name'], $filePath)) {
+        error_log("Erro ao mover arquivo para: $filePath");
+        respond(500, ['erro' => 'Falha ao mover o arquivo']);
+    }
+
+    $publicUrl = "http://localhost/projetecmainec2/Projeto/uploads/chat/" . $filename;
+
+    $sql = "INSERT INTO Mensagens (remetente_id, destinatario_id, conteudo, arquivo_url, data_hora, tipo)
+            VALUES (:r, :d, NULL, :u, NOW(), 'arquivo')";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':r' => $_SESSION['registro'],
+        ':d' => $contact_id,
+        ':u' => $publicUrl
+    ]);
+
+    $lastId = $pdo->lastInsertId();
+
+    $fstmt = $pdo->prepare("SELECT * FROM Mensagens WHERE id = :id LIMIT 1");
+    $fstmt->execute([':id' => $lastId]);
+    $mensagem = $fstmt->fetch(PDO::FETCH_ASSOC);
+
+    respond(200, [
+        'sucesso' => true,
+        'mensagem' => $mensagem
+    ]);
+}
+
+
+
+
+
+
+
+respond(400, ['erro' => 'Ação inválida']);

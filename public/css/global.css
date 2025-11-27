@@ -35,8 +35,8 @@ main {
 
 footer {
     background: #FFF;
+    padding: 2rem 0;
     text-align: center;
-    padding: 2rem;
     color: #64748b;
     margin-top: 3rem;
     border-top: 1px solid #e2e8f0;

@@ -21,6 +21,20 @@ if (!empty($search)) {
     });
 }
 
+function formatarTelefone($tel) {
+    $tel = preg_replace('/\D/', '', $tel);
+
+    if (strlen($tel) === 11) {
+        return sprintf("(%s) %s %s-%s",
+            substr($tel, 0, 2),   
+            substr($tel, 2, 1),   
+            substr($tel, 3, 4),   
+            substr($tel, 7, 4)   
+        );
+    }
+
+    return $tel;
+}
 
 ?>
 
@@ -69,7 +83,7 @@ if (!empty($search)) {
                         </div>
                         <div class="info-row">
                             <span class="info-label">Telefone:</span>
-                            <span class="info-value"><?php echo htmlspecialchars($monitor['telefone']); ?></span>
+                            <span class="info-value"><?php echo htmlspecialchars(formatarTelefone($monitor['telefone'])); ?></span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Turma:</span>

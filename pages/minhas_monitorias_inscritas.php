@@ -187,28 +187,24 @@ function diasRestantes($data) {
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-icon">📚</div>
                             <div class="info-content">
                                 <div class="info-label">Professores Responsáveis</div>
                                 <div class="info-value"><?php echo $inscricao['professor']; ?></div>
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-icon">🕐</div>
                             <div class="info-content">
                                 <div class="info-label">Horário</div>
                                 <div class="info-value"><?php echo $inscricao['horario']; ?></div>
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-icon">📍</div>
                             <div class="info-content">
                                 <div class="info-label">Local</div>
                                 <div class="info-value">Sala <?php echo $inscricao['sala']; ?></div>
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-icon">📅</div>
                             <div class="info-content">
                                 <div class="info-label">Sessão</div>
                                 <div class="info-value">

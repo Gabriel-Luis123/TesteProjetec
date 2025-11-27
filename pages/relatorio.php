@@ -6,8 +6,12 @@ require_once __DIR__ . '/header.php';
 
 $monitoriaId = $_GET['id'] ?? 1;
 
-require_once __DIR__ . '/../src/controllers/relatorio_dados.php';
 
+
+require_once __DIR__ . '/../src/controllers/relatorio_dados.php';
+var_dump($conteudosArray);
+
+var_dump($conteudosString);
 ?>
 <div class="container">
     <header style="background: <?php echo $monitoria['cor']; ?>">

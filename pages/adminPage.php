@@ -97,8 +97,8 @@ sort($classes);
                                     <h4 class="font-semibold text-gray-900"><?php echo htmlspecialchars($user['name']); ?></h4>
                                     <span class="badge"><?php echo htmlspecialchars($user['class']); ?></span>
                                 </div>
-                                <p class="text-sm text-gray-600">ID: <?php echo htmlspecialchars($user['id']); ?></p>
-                                <p class="text-sm text-gray-600"><?php echo htmlspecialchars($user['email']); ?></p>
+                                <p class="text-sm text-gray-600">RA: <?php echo htmlspecialchars($user['id']); ?></p>
+                                <p class="text-sm text-gray-600">Email: <?php echo htmlspecialchars($user['email']); ?></p>
                             </div>
                         </div>
 
@@ -152,34 +152,52 @@ sort($classes);
 
         <?php if (!empty($filteredUsers)): ?>
             <div class="flex justify-center mt-8">
-                <button type="submit" class="button-save text-lg px-8 py-3">
-                    💾 Salvar Alterações
+                <button type="submit" id="botaoSalvar" class="button-save btn-fixo text-lg px-8 py-3">
+                    Salvar Alterações
                 </button>
             </div>
         <?php endif; ?>
     </form>
 </main>
 
-
 <script>
-document.querySelectorAll('input[type="checkbox"][name^="subjects_"]').forEach(item => {
+    const botao = document.getElementById("botaoSalvar");
 
-    item.addEventListener('change', function () {
+    window.addEventListener("scroll", () => {
+        const scrolled = window.scrollY + window.innerHeight;
+        const totalHeight = document.body.scrollHeight;
 
-        if (this.checked) {
-            const name = this.getAttribute('name'); 
-            const userId = name.match(/subjects_(\d+)/)[1]; 
+        const distanciaFinal = 200; 
 
-            const allSubjects = document.querySelectorAll(
-                `input[name="subjects_${userId}[]"]`
-            );
-
-            allSubjects.forEach(cb => {
-                if (cb !== this) cb.checked = false;
-            });
+        if (scrolled >= totalHeight - distanciaFinal) {
+            botao.classList.remove("btn-fixo");
+            botao.classList.add("btn-normal");
+        } else {
+            botao.classList.add("btn-fixo");
+            botao.classList.remove("btn-normal");
         }
     });
-});
+</script>
+
+<script>
+    document.querySelectorAll('input[type="checkbox"][name^="subjects_"]').forEach(item => {
+
+        item.addEventListener('change', function() {
+
+            if (this.checked) {
+                const name = this.getAttribute('name');
+                const userId = name.match(/subjects_(\d+)/)[1];
+
+                const allSubjects = document.querySelectorAll(
+                    `input[name="subjects_${userId}[]"]`
+                );
+
+                allSubjects.forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+            }
+        });
+    });
 </script>
 
 
@@ -210,36 +228,36 @@ document.querySelectorAll('input[type="checkbox"][name^="subjects_"]').forEach(i
 </script>
 
 <script>
-document.getElementById('monitoresForm').addEventListener('submit', function(event) {
+    document.getElementById('monitoresForm').addEventListener('submit', function(event) {
 
-    let error = false;
-    let message = "";
+        let error = false;
+        let message = "";
 
-    <?php foreach ($filteredUsers as $user): ?>
-    (function() {
-        const userId = "<?php echo $user['id']; ?>";
+        <?php foreach ($filteredUsers as $user): ?>
+                (function() {
+                    const userId = "<?php echo $user['id']; ?>";
 
-        const monitorCheckbox = document.querySelector(`input[name="monitor_${userId}"]`);
+                    const monitorCheckbox = document.querySelector(`input[name="monitor_${userId}"]`);
 
-        if (monitorCheckbox && monitorCheckbox.checked) {
+                    if (monitorCheckbox && monitorCheckbox.checked) {
 
-            const selectedSubjects = document.querySelectorAll(
-                `input[name="subjects_${userId}[]"]:checked`
-            );
+                        const selectedSubjects = document.querySelectorAll(
+                            `input[name="subjects_${userId}[]"]:checked`
+                        );
 
-            if (selectedSubjects.length === 0) {
-                error = true;
-                message += "• O monitor <?php echo addslashes($user['name']); ?> precisa ter pelo menos 1 matéria selecionada.\n";
-            }
+                        if (selectedSubjects.length === 0) {
+                            error = true;
+                            message += "• O monitor <?php echo addslashes($user['name']); ?> precisa ter pelo menos 1 matéria selecionada.\n";
+                        }
+                    }
+                })();
+        <?php endforeach; ?>
+
+        if (error) {
+            event.preventDefault();
+            alert("⚠️ Erro:\n" + message);
         }
-    })();
-    <?php endforeach; ?>
-
-    if (error) {
-        event.preventDefault(); 
-        alert("⚠️ Erro:\n" + message);
-    }
-});
+    });
 </script>
 
 
