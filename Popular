@@ -1,0 +1,512 @@
+use bd_monifacil;
+-- ================================
+-- 1) 30 Monitorias (usando monitores reais 0089410..0089419)
+-- ================================
+INSERT INTO Monitoria
+(Registro_Academico, Publico_Alvo, Localizacao, Data, Horario, Capacidade_Alunos, Quantidade_Inscritos, Conteudos_Abordados, Feedback, Concluida, Disciplina)
+VALUES
+-- 1 (0089410 - Matemática-2)
+('0089410','1° ano geral','101','2025-12-01','13:00',20,4,'[\"Funções\",\"Limites\",\"Derivadas\"]',NULL,0,'Matemática-2'),
+-- 2 (0089410)
+('0089410','1° ano geral','102','2025-12-08','14:00',18,3,'[\"Equações\",\"Gráficos\",\"Aplicações\"]',NULL,0,'Matemática-2'),
+-- 3 (0089411 - História-3)
+('0089411','2° ano geral','103','2025-12-02','13:30',22,6,'[\"Revolução Industrial\",\"Era Vargas\",\"Ditadura\"]',NULL,0,'História-3'),
+-- 4 (0089411)
+('0089411','2° ano geral','104','2025-12-10','14:30',20,5,'[\"Império Brasileiro\",\"Primeira República\",\"Segunda Guerra\"]',NULL,0,'História-3'),
+-- 5 (0089412 - Português-2)
+('0089412','1° ano geral','105','2025-12-03','15:00',25,7,'[\"Interpretação\",\"Coesão\",\"Argumentação\"]',NULL,0,'Português-2'),
+-- 6 (0089412)
+('0089412','1° ano geral','106','2025-12-11','15:30',20,4,'[\"Sintaxe\",\"Morfologia\",\"Redação\"]',NULL,0,'Português-2'),
+-- 7 (0089413 - Biologia-3)
+('0089413','2° ano geral','201','2025-12-04','16:00',24,9,'[\"Citologia\",\"Genética\",\"Ecologia\"]',NULL,0,'Biologia-3'),
+-- 8 (0089413)
+('0089413','2° ano geral','202','2025-12-12','16:30',20,6,'[\"Mitose\",\"Meiose\",\"Expressão gênica\"]',NULL,0,'Biologia-3'),
+-- 9 (0089414 - Eletrônica A.-2)
+('0089414','1° ano (Elet-1)','203','2025-12-06','13:00',18,3,'[\"Leis de Ohm\",\"Circuitos RC\",\"Transistores\"]',NULL,0,'Eletrônica A.-2'),
+-- 10 (0089414)
+('0089414','1° ano (Elet-1)','204','2025-12-15','14:00',16,2,'[\"Componentes\",\"Soldagem\",\"Medidas elétricas\"]',NULL,0,'Eletrônica A.-2'),
+-- 11 (0089415 - WEB-3)
+('0089415','2° ano (Info-2)','205','2025-12-07','13:30',30,12,'[\"HTML semântico\",\"CSS responsivo\",\"Acessibilidade\"]',NULL,0,'WEB-3'),
+-- 12 (0089415)
+('0089415','2° ano (Info-2)','206','2025-12-18','15:00',28,8,'[\"JavaScript básico\",\"DOM\",\"Eventos\"]',NULL,0,'WEB-3'),
+-- 13 (0089416 - Química-2)
+('0089416','1° ano geral','301','2025-12-09','14:30',22,5,'[\"Estequiometria\",\"pH\",\"Soluções\"]',NULL,0,'Química-2'),
+-- 14 (0089416)
+('0089416','1° ano geral','302','2025-12-20','16:00',20,6,'[\"Reações ácido-base\",\"Titrimetria\",\"Termoquímica\"]',NULL,0,'Química-2'),
+-- 15 (0089417 - Filosofia-3)
+('0089417','2° ano geral','303','2025-12-13','16:30',25,7,'[\"Ética\", \"Existencialismo\", \"Teoria do Conhecimento\"]',NULL,0,'Filosofia-3'),
+-- 16 (0089417)
+('0089417','2° ano geral','304','2025-12-22','17:00',20,4,'[\"Política e moral\",\"Contratualismo\",\"Estética\"]',NULL,0,'Filosofia-3'),
+-- 17 (0089418 - Banco de Dados-2)
+('0089418','1° ano (Info-1)','305','2026-01-05','13:00',26,9,'[\"Modelagem ER\",\"SQL básico\",\"Normalização\"]',NULL,0,'Banco de Dados-2'),
+-- 18 (0089418)
+('0089418','1° ano (Info-1)','306','2026-01-12','14:30',24,6,'[\"Joins\",\"Índices\",\"Transações\"]',NULL,0,'Banco de Dados-2'),
+-- 19 (0089419 - Física-3)
+('0089419','2° ano geral','101','2026-01-07','15:00',28,10,'[\"Cinemática\",\"Dinâmica\",\"Trabalho e Energia\"]',NULL,0,'Física-3'),
+-- 20 (0089419)
+('0089419','2° ano geral','102','2026-01-15','16:30',26,8,'[\"Movimento retilíneo\",\"Leis de Newton\",\"Gravitação\"]',NULL,0,'Física-3'),
+-- 21 (0089410)
+('0089410','1° ano geral','103','2026-01-09','13:30',20,5,'[\"Polinomiais\",\"Funções exponenciais\",\"Logaritmos\"]',NULL,0,'Matemática-2'),
+-- 22 (0089411)
+('0089411','2° ano geral','104','2026-01-17','14:00',22,7,'[\"História contemporânea\",\"Movimentos sociais\",\"Globalização\"]',NULL,0,'História-3'),
+-- 23 (0089412)
+('0089412','1° ano geral','105','2026-01-11','15:30',24,6,'[\"Concordância\",\"Regência\",\"Pronomes\"]',NULL,0,'Português-2'),
+-- 24 (0089413)
+('0089413','2° ano geral','106','2026-01-20','16:00',20,4,'[\"Fisiologia\",\"Sistemas do corpo\",\"Homeostase\"]',NULL,0,'Biologia-3'),
+-- 25 (0089414)
+('0089414','1° ano (Elet-1)','201','2026-01-13','13:00',18,3,'[\"Amplificadores\",\"Filtros\",\"Sinais\"]',NULL,0,'Eletrônica A.-2'),
+-- 26 (0089415)
+('0089415','2° ano (Info-2)','202','2026-01-21','17:00',30,11,'[\"SPA e SSR\",\"Rotas\",\"State Management\"]',NULL,0,'WEB-3'),
+-- 27 (0089416)
+('0089416','1° ano geral','203','2026-01-23','14:30',22,5,'[\"Química orgânica básica\",\"Funções orgânicas\",\"Isomeria\"]',NULL,0,'Química-2'),
+-- 28 (0089417)
+('0089417','2° ano geral','204','2026-02-02','15:30',20,2,'[\"Filosofia da ciência\",\"Racionalismo\",\"Empirismo\"]',NULL,0,'Filosofia-3'),
+-- 29 (0089418)
+('0089418','1° ano (Info-1)','205','2026-02-05','16:00',24,7,'[\"NoSQL\",\"Modelagem orientada a documentos\",\"Agregações\"]',NULL,0,'Banco de Dados-2'),
+-- 30 (0089419)
+('0089419','2° ano geral','206','2026-02-10','13:00',26,9,'[\"Ondas\",\"Oscilações\",\"Sistemas harmônicos\"]',NULL,0,'Física-3')
+;
+
+-- ================================
+-- 2) Alunos_Inscritos: inscrevendo uma seleção de alunos (incluindo monitores — opção B)
+--    Para cada monitoria acima eu insiro 4 alunos (variedade) usando SELECT para recuperar ID_Monitoria correspondente.
+-- ================================
+-- Observação: cada bloco insere múltiplas linhas, cada uma referenciando a monitoria via SELECT do ID.
+-- Exemplo de padrão: inscrevo 4 registros por monitoria; ajuste conforme sua necessidade.
+
+-- Para monitoria 1 (0089410 em 2025-12-01 13:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-01' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-01' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-01' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-01' AND m.Horario='13:00';
+
+-- monitoria 2 (0089410 em 2025-12-08 14:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-08' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-08' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-08' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2025-12-08' AND m.Horario='14:00';
+
+-- monitoria 3 (0089411 em 2025-12-02 13:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-02' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-02' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-02' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-02' AND m.Horario='13:30';
+
+-- monitoria 4 (0089411 em 2025-12-10 14:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-10' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-10' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-10' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2025-12-10' AND m.Horario='14:30';
+
+-- monitoria 5 (0089412 em 2025-12-03 15:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-03' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-03' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-03' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-03' AND m.Horario='15:00';
+
+-- monitoria 6 (0089412 em 2025-12-11 15:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2025-12-11' AND m.Horario='15:30';
+
+-- monitoria 7 (0089413 em 2025-12-04 16:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-04' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-04' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-04' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-04' AND m.Horario='16:00';
+
+-- monitoria 8 (0089413 em 2025-12-12 16:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-12' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-12' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-12' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2025-12-12' AND m.Horario='16:30';
+
+-- monitoria 9 (0089414 em 2025-12-06 13:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-06' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-06' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-06' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-06' AND m.Horario='13:00';
+
+-- monitoria 10 (0089414 em 2025-12-15 14:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-15' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-15' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-15' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2025-12-15' AND m.Horario='14:00';
+
+-- monitoria 11 (0089415 em 2025-12-07 13:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-07' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-07' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-07' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-07' AND m.Horario='13:30';
+
+-- monitoria 12 (0089415 em 2025-12-18 15:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-18' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-18' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-18' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2025-12-18' AND m.Horario='15:00';
+
+-- monitoria 13 (0089416 em 2025-12-09 14:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-09' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-09' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-09' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-09' AND m.Horario='14:30';
+
+-- monitoria 14 (0089416 em 2025-12-20 16:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2025-12-20' AND m.Horario='16:00';
+
+-- monitoria 15 (0089417 em 2025-12-13 16:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-13' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-13' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-13' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-13' AND m.Horario='16:30';
+
+-- monitoria 16 (0089417 em 2025-12-22 17:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-22' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-22' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-22' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2025-12-22' AND m.Horario='17:00';
+
+-- monitoria 17 (0089418 em 2026-01-05 13:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-05' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-05' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-05' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-05' AND m.Horario='13:00';
+
+-- monitoria 18 (0089418 em 2026-01-12 14:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-12' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-12' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-12' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-01-12' AND m.Horario='14:30';
+
+-- monitoria 19 (0089419 em 2026-01-07 15:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-07' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-07' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-07' AND m.Horario='15:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-07' AND m.Horario='15:00';
+
+-- monitoria 20 (0089419 em 2026-01-15 16:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-15' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-15' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-15' AND m.Horario='16:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-01-15' AND m.Horario='16:30';
+
+-- monitoria 21 (0089410 em 2026-01-09 13:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2026-01-09' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2026-01-09' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2026-01-09' AND m.Horario='13:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089410' AND m.Data='2026-01-09' AND m.Horario='13:30';
+
+-- monitoria 22 (0089411 em 2026-01-17 14:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2026-01-17' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2026-01-17' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2026-01-17' AND m.Horario='14:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089411' AND m.Data='2026-01-17' AND m.Horario='14:00';
+
+-- monitoria 23 (0089412 em 2026-01-11 15:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2026-01-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2026-01-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2026-01-11' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089412' AND m.Data='2026-01-11' AND m.Horario='15:30';
+
+-- monitoria 24 (0089413 em 2026-01-20 16:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2026-01-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2026-01-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2026-01-20' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089413' AND m.Data='2026-01-20' AND m.Horario='16:00';
+
+-- monitoria 25 (0089414 em 2026-01-13 13:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2026-01-13' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2026-01-13' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2026-01-13' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089414' AND m.Data='2026-01-13' AND m.Horario='13:00';
+
+-- monitoria 26 (0089415 em 2026-01-21 17:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2026-01-21' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2026-01-21' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2026-01-21' AND m.Horario='17:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089415' AND m.Data='2026-01-21' AND m.Horario='17:00';
+
+-- monitoria 27 (0089416 em 2026-01-23 14:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2026-01-23' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2026-01-23' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2026-01-23' AND m.Horario='14:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089416' AND m.Data='2026-01-23' AND m.Horario='14:30';
+
+-- monitoria 28 (0089417 em 2026-02-02 15:30)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079410', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2026-02-02' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079411', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2026-02-02' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2026-02-02' AND m.Horario='15:30';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079412', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089417' AND m.Data='2026-02-02' AND m.Horario='15:30';
+
+-- monitoria 29 (0089418 em 2026-02-05 16:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079413', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-02-05' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079414', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-02-05' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-02-05' AND m.Horario='16:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079415', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089418' AND m.Data='2026-02-05' AND m.Horario='16:00';
+
+-- monitoria 30 (0089419 em 2026-02-10 13:00)
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079416', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-02-10' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079417', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-02-10' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0089419', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-02-10' AND m.Horario='13:00';
+INSERT INTO Alunos_Inscritos (Registro_Academico, Presenca_confirmada, Presenca_requisitada, ID_Monitoria)
+SELECT '0079418', FALSE, TRUE, m.ID_Monitoria FROM Monitoria m
+ WHERE m.Registro_Academico='0089419' AND m.Data='2026-02-10' AND m.Horario='13:00';
+
+
+-- ================================
+-- 4) Mensagens de teste entre alguns alunos/monitores
+--    (campo tipo usado; arquivo_url NULL quando tipo='texto')
+-- ================================
+INSERT INTO Mensagens (remetente_id, destinatario_id, conteudo, tipo, arquivo_url)
+VALUES
+('0079410','0089410','Olá, professor — posso tirar uma dúvida antes da monitoria?','texto',NULL),
+('0089410','0079410','Claro! Pode mandar sua dúvida aqui ou trazer na sala 101 antes das 13:00.','texto',NULL),
+('0079411','0089415','Oi, a monitoria de WEB-3 terá material de apoio?','texto',NULL),
+('0089415','0079411','Sim, vou postar um PDF e o link para o repositório após a aula.','texto',NULL),
+('0089412','0089413','Tem como revisar a lista de exercícios de genética?','texto',NULL),
+('0089414','0079414','Podemos trocar a horário para a prática de soldagem?','texto',NULL),
+('0079414','0089414','Sim, eu posso ir na sala 204 às 14:00.','texto',NULL);
+
+select * from monitora;

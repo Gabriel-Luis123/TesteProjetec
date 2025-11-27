@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Página de Chat";
+$titlePage = "Página de Chat";
 $nameCSS = "chat";
 include_once "header.php";
 

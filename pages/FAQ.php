@@ -51,7 +51,7 @@ $faqs = [
     ]
 ];
 
-$pageCSS = 'FAQs - Sistema de Monitoria';
+$titlePage = 'FAQs - Sistema de Monitoria';
 $nameCSS = 'FAQ';
 require_once __DIR__ . '/header.php';
 

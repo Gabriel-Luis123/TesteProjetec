@@ -4,7 +4,6 @@ $nameCSS = 'visualizar_monitor';
 $titlePage = 'Perfil Monitor';
 require_once __DIR__ . '/header.php';
 
-// Simular dados do monitor (em produção, viriam de um banco de dados)
 require_once __DIR__ . '/../src/controllers/visualizacao_monitor_dados.php';
 
 function formatarTelefone($tel) {

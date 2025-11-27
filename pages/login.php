@@ -29,6 +29,7 @@ if (isset($_GET['mensagem']) && $_GET['mensagem'] !== '') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - MONIFÁCIL</title>
+    <link rel="icon" href="../public/img/menuItens/icone.png" type="image/png">
     <link rel="stylesheet" href="../public/css/login.css">
 </head>
 

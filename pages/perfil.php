@@ -1,5 +1,5 @@
 <?php
-$title = 'Meu Perfil - MoniFácil';
+$titlePage = 'Meu Perfil - MoniFácil';
 $nameCSS = 'perfil';
 require_once __DIR__ . '/header.php';
 

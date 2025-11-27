@@ -5,6 +5,8 @@ if (!isset($_SESSION['status'])) {
     exit;
 }
 
+require_once 
+
 $paginaAtual = basename($_SERVER['PHP_SELF']);
 
 if ($_SESSION['status'] === 'Administrador' && $paginaAtual !== 'adminPage.php') {

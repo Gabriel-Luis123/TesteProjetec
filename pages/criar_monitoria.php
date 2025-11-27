@@ -1,6 +1,6 @@
 <?php
 $nameCSS = 'criar_monitoria';
-$title = 'Criar Nova Monitoria';
+$titlePage = 'Criar Nova Monitoria';
 
 require_once __DIR__ . '/header.php';
 

@@ -1,7 +1,7 @@
 <?php
 
 $nameCSS= 'inicial';
-$pageTitle = 'MONIFÁCIL - Plataforma de Monitorias';
+$titlePage = 'MONIFÁCIL - Plataforma de Monitorias';
 
 include_once __DIR__ . '/header.php';
 require_once __DIR__ . '/../src/controllers/monitorias_inicial.php';

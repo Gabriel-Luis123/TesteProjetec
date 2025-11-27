@@ -1,6 +1,6 @@
 <?php
 $nameCSS = 'disciplina';
-$title = 'Monitorias Disponíveis';
+$titlePage = 'Monitorias Disponíveis';
 include_once __DIR__ . '/header.php';
 
 $mensagem = !isset($_GET['mensagem']) ? '' : $_GET['mensagem'];

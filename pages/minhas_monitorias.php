@@ -1,7 +1,7 @@
 <?php
 
 $nameCSS = 'minhas_monitorias';
-$title = 'Minhas Monitorias - MONIFÁCIL';
+$titlePage = 'Minhas Monitorias - MONIFÁCIL';
 
 require_once __DIR__ . '/header.php';
 
